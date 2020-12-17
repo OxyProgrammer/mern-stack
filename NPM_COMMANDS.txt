@@ -1,0 +1,4 @@
+Commands to create next js app:
+next js documentation: https://nextjs.org/docs/getting-started
+1) First fire: npm init -y
+2) Then fire: npm install --save next react react-dom
