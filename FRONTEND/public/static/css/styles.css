@@ -1,6 +1,6 @@
 #nprogress .bar{
   height: 4px !important;
-  background: red !important;
+  background: #34b4eb(131, 131, 131) !important;
 }
 
 .nav a:hover{
