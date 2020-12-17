@@ -3,10 +3,11 @@ import React from 'react';
 import Router from 'next/router';
 import Link from 'next/link';
 import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 //#region The following code is responsible for the navbar progress bar.
-/*https://nextjs.org/docs/api-reference/next/router*/
-Router.onRouteChangeStart = url => { NProgress.start(); }
+//https://nextjs.org/docs/api-reference/next/router
+Router.onRouteChangeStart = url => NProgress.start();
 Router.onRouteChangeComplete = url => NProgress.done();
 Router.onRouteChangeError = url => NProgress.done();
 
@@ -21,10 +22,7 @@ const layout = ({ children }) => {
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous" />
-      <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css"
-        integrity="sha512-42kB9yDlYiCEfx2xVwq0q7hT4uf26FUgSIZBK8uiaEnTdShXjwr8Ip1V4xGJMg3mHkUt9nNuTDxunHF0/EgxLQ=="
-        crossorigin="anonymous" />
+      <link rel="stylesheet" href="/static/css/styles.css" />
     </React.Fragment>
   );
 
