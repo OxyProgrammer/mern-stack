@@ -50,4 +50,6 @@ Thumbs.db
 *.wmv
 
 FRONTEND/package-lock.json
+FRONTEND/.env
 BACKEND/package-lock.json
+BACKEND/.env

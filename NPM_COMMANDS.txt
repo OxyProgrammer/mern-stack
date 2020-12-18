@@ -2,12 +2,13 @@ Commands to create next js app:
 ------------------------------
 next js documentation: https://nextjs.org/docs/getting-started
 1) First fire: npm init -y
-2) Then fire: npm install --save next react react-dom
+2) Then fire: npm install --save next react react-dom 
 3) Progress bar in navbar: npm install --save nprogress
 4) CSS importing: npm install --save @zeit/next-css
-
+5) Run the server by => npm run dev
 
 For Server
 ----------
 1) First fire: npm init -y
-2) Then install relevant packages: npm install --save express nodemon mongoose
+2) Then install relevant packages: npm install --save express nodemon mongoose body-parser cors dotenv express-jwt express-validator jsonwebtoken aws-sdk morgan
+3) Run the server using => npm start
