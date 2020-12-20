@@ -2,9 +2,10 @@ import { useState } from 'react';
 import Layout from '../components/Layout';
 import axios from 'axios';
 import {showSuccessMessage,showErrorMessage} from '../helpers/alerts';
+import * as config from '../config';
 
 const register = () => {
-
+  
   const [state, setState] = useState({
     name: '',
     email: '',
@@ -20,32 +21,15 @@ const register = () => {
     setState({ ...state, [inputId]: event.target.value, error: '', success: '', buttonText: 'Register' });
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async event=>{
     event.preventDefault();
-    console.table(name,email,password);
-    setState({...state,buttonText:'Registering'})
-    axios.post(`http://localhost:5000/api/register`,{
-      name,
-      email,
-      password
-    })
-    .then(response=>{
-     setState({
-       ...state,
-      name:'',
-      email:'',
-      password:'',
-      buttonText:'Submitted',
-      success:response.data.message
-     })
-    })
-    .catch(error=>{
-      setState({
-        ...state,
-        buttonText:'Register',
-        error:error.response.data.error
-       })
-    });
+    setState({...state,buttonText:'Registering'});
+    try{
+      const response = await axios.post(`${config.API}/register`,{name, email, password });
+      setState({...state, name:'', email:'', password:'', buttonText:'Submitted', success:response.data.message });
+    }catch(error){
+      setState({...state, buttonText:'Register', error:error.response.data.error });
+    }
   }
 
   const registerForm = () => {
@@ -57,7 +41,8 @@ const register = () => {
             value={name}
             type="text" 
             className="form-control" 
-            placeholder="Enter your name" />
+            placeholder="Enter your name"
+            required />
         </div>
 
         <div className="form-group">
@@ -65,7 +50,8 @@ const register = () => {
             value={email}
             type="email" 
             className="form-control" 
-            placeholder="Enter your email" />
+            placeholder="Enter your email" 
+            required/>
         </div>
 
         <div className="form-group">
@@ -73,7 +59,8 @@ const register = () => {
             value={password}
             type="password" 
             className="form-control" 
-            placeholder="Enter your password" />
+            placeholder="Enter your password" 
+            required/>
         </div>
 
         <div className="form-group">
