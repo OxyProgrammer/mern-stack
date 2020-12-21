@@ -72,11 +72,14 @@ const register = () => {
   
   return (<Layout>
     <div className="col-md-6 offset-md-3">
-      <h1>Register</h1>
-      <br/>
-      {success&& showSuccessMessage(success)}
-      {error&& showErrorMessage(error)}
-      {registerForm()}
+      <div class="card">
+        <h5 class="card-header">Register</h5>
+          <div class="card-body">
+            {success && showSuccessMessage(success)}
+            {error && showErrorMessage(error)}
+            {registerForm()}
+        </div>
+      </div>
     </div>
   </Layout>);
 };

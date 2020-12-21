@@ -64,11 +64,14 @@ const login = () => {
 return(
   <Layout>
     <div className="col-md-6 offset-md-3">
-      <h1>Login</h1>
-      <br/>
-      {success && showSuccessMessage(success)}
-      {error && showErrorMessage(error)}
-      {loginForm()}
+      <div class="card">
+        <h5 class="card-header">Login</h5>
+          <div class="card-body">
+            {success && showSuccessMessage(success)}
+            {error && showErrorMessage(error)}
+            {loginForm()}
+          </div>
+      </div>
     </div>
   </Layout>
 )};
