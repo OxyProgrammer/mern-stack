@@ -16,15 +16,15 @@ const ActivateAccount=({router})=>{
     error:''
   })
 
-    const {name,token,buttonText,success,error}=state;
+  const {name,token,buttonText,success,error}=state;
 
-useEffect(()=>{
-  let token=router.query.token;
-    if(token){
-      const {name}=jwt.decode(token);
-      setState({...state,name,token});
-    }
-  },[router]);
+  useEffect(()=>{
+    let token=router.query.token;
+      if(token){
+        const {name}=jwt.decode(token);
+        setState({...state,name,token});
+      }
+    },[router]);
 
   const clickSubmit=async event=>{
     event.preventDefault();

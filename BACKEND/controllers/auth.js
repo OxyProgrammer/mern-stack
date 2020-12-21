@@ -2,6 +2,7 @@ const User=require('../models/user');
 const AWS=require('aws-sdk');
 const jwt=require('jsonwebtoken');
 const {registerEmailParams} =require('../helpers/email');
+const shortId=require('shortid');
 
 AWS.config.update({
   accessKeyId:process.env.AWS_ACCESS_KEY_ID,
@@ -18,7 +19,6 @@ exports.register = (req, res) => {
   //check if user exists in db
   User.findOne({email}).exec((err,user)=>{
     if(user){
-      console.log(err);
       return res.status(400).json({
         error:'Email is already being used by another guy!'
       });
@@ -47,17 +47,52 @@ exports.register = (req, res) => {
       })
     });
     });
-
- 
-
-  
 };
 
+exports.registerActivate=(req,res)=>{
+  const{token}=req.body;
+  if(token){
+  try{
+    jwt.verify(token,process.env.JWT_ACCOUNT_ACTIVATION,function(error,decoded){
+      if(error){
+        return res.status(401).json({
+          error:'Expired link. Try again.'
+        });
+      }
 
+      const {name,email,password}=jwt.decode(token);
+      const username=shortId.generate();
 
-
-
-
-
-
-
+      User.findOne({email}).exec((error,user)=>{
+        if(error){
+          if(user){
+            return res.status(401).json({
+              error:'Email is taken.'
+            });
+          }
+        }
+        //Register new user.
+        const newUser=new User({username,name,email,password});
+        newUser.save((err,result)=>{
+        if(err){
+            return res.status(401).json({
+              error:'Error saving user in database. Try later.'
+            });
+          }
+          return res.json({
+            message:'Registration success. Please login.'
+          });
+        });
+      });
+      });
+    }catch(error){
+      return res.status(401).json({
+        error:'Token could not be verified. May be it expired. Please try again.'
+      });
+    }
+    }else{
+      return res.status(401).json({
+        error:'Token not available.'
+      });
+    }
+};

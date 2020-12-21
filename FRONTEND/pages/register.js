@@ -71,14 +71,12 @@ const register = () => {
   }
 
   return (<Layout>
- 
     <div className="col-md-6 offset-md-3">
       <h1>Register </h1>
       <br/>
       {success&& showSuccessMessage(success)}
       {error&& showErrorMessage(error)}
       {registerForm()}
-     
     </div>
   </Layout >);
 };
