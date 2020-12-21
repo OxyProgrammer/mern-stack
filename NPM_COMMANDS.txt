@@ -2,7 +2,7 @@ Commands to create next js app:
 ------------------------------
 next js documentation: https://nextjs.org/docs/getting-started
 1) First fire: npm init -y
-2) Then fire: npm install --save next react react-dom jsonwebtoken
+2) Then fire: npm install --save next react react-dom jsonwebtoken js-cookie
 3) Progress bar in navbar: npm install --save nprogress
 4) CSS importing: npm install --save @zeit/next-css
 5) Run the server by => npm run dev

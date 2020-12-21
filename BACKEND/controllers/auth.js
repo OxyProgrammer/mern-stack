@@ -12,7 +12,6 @@ AWS.config.update({
 
 const ses=new AWS.SES({apiVersion:'2010-12-01'});
 
-
 exports.register = (req, res) => {
 
   const{name,email,password}=req.body;
@@ -25,7 +24,7 @@ exports.register = (req, res) => {
     };
 
     //generate json web token with username, email and password
-    let token=jwt.sign({name,email,password},process.env.JWT_ACCOUNT_ACTIVATION,{
+    const token=jwt.sign({name,email,password},process.env.JWT_ACCOUNT_ACTIVATION,{
       expiresIn:'30m'
     });
 
@@ -96,3 +95,29 @@ exports.registerActivate=(req,res)=>{
       });
     }
 };
+
+exports.signInUser=(req,res)=>{
+  const{email,password}=req.body;
+  User.findOne({email}).exec((error,user)=>{
+    if(!user){
+      return res.status(401).json({
+        error:'Unable to locate User. Please sign up before trying to log in.'
+      });
+    };
+
+  if(!user.authenticate(password)){
+    return res.status(401).json({
+      error:'Either email or password doesn\'t match.'
+    });
+  }
+  const token=jwt.sign({_id:user._id},process.env.JWT_SECRET,{
+    expiresIn:'7d'
+  });
+  const{_id,name,email,role}=user;
+  return res.status(200).json({
+    token,
+    user:{_id,name,email,role},
+    message:'User authentication successful!'
+  })
+  });
+}
