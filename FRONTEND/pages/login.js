@@ -67,7 +67,7 @@ return(
   <Layout>
     <div className="col-md-6 offset-md-3">
       <div className="card">
-        <h5 class="card-header">SIGN IN<FontAwesomeIcon className="float-sm-right" icon={faSignInAlt}/></h5>  
+        <h5 className="card-header">SIGN IN<FontAwesomeIcon className="float-sm-right" icon={faSignInAlt}/></h5>  
         <div className="card-body">
           {success && showSuccessMessage(success)}
           {error && showErrorMessage(error)}
