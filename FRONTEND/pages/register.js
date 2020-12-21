@@ -4,6 +4,9 @@ import axios from 'axios';
 import {showSuccessMessage,showErrorMessage} from '../helpers/alerts';
 import * as config from '../config';
 
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const register = () => {
   
   const [state, setState] = useState({
@@ -64,7 +67,7 @@ const register = () => {
         </div>
 
         <div className="form-group">
-          <button className="btn btn-primary">{buttonText}</button>
+          <button className="btn btn-primary float-sm-right">{buttonText}</button>
         </div>
 
       </form>)
@@ -73,7 +76,7 @@ const register = () => {
   return (<Layout>
     <div className="col-md-6 offset-md-3">
       <div className="card">
-        <h5 className="card-header">Register</h5>
+        <h5 className="card-header">Register <FontAwesomeIcon className="float-sm-right" icon={faUserPlus}/></h5>
           <div className="card-body">
             {success && showSuccessMessage(success)}
             {error && showErrorMessage(error)}
