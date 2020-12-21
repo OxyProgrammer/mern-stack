@@ -72,9 +72,9 @@ const register = () => {
   
   return (<Layout>
     <div className="col-md-6 offset-md-3">
-      <div class="card">
-        <h5 class="card-header">Register</h5>
-          <div class="card-body">
+      <div className="card">
+        <h5 className="card-header">Register</h5>
+          <div className="card-body">
             {success && showSuccessMessage(success)}
             {error && showErrorMessage(error)}
             {registerForm()}

@@ -15,40 +15,41 @@ Router.onRouteChangeError = url => NProgress.done();
 
 
 const layout = ({ children }) => {
-
   const head = () => (
     <React.Fragment>
-      {/* <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-        crossOrigin="anonymous" /> */}
-         <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/static/css/bootstrap.min.css" />
       <link rel="stylesheet" href="/static/css/styles.css" />
     </React.Fragment>
   );
 
-  const nav = () => (
-    <ul className="nav nav-tabs bg-dark">
-
-      <li className="nav-item">
-        <Link href="/">
-          <a className="nav-link text-light">Home</a>
-        </Link>
-      </li>
-
-      <li className="nav-item">
-        <Link href="/login">
-          <a className="nav-link text-light">Login</a>
-        </Link>
-      </li>
-
-      <li className="nav-item">
-        <Link href="/register">
-          <a className="nav-link text-light">Register</a>
-        </Link>
-      </li>
-
-    </ul>
+  const nav = () => ( 
+  <div className="navbar navbar-expand-lg navbar-dark bg-dark">
+   <div className="container">
+    <a className="navbar-brand" href="/">MERN-A</a>
+      <button className="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div className="collapse navbar-collapse" id="navbarText">
+        <ul className="navbar-nav ml-auto">
+          <li className="nav-item">
+              <Link href="/">
+                <a className="nav-link">Home</a>
+              </Link>
+          </li>
+          <li className="nav-item">
+            <Link href="/login">
+              <a className="nav-link">Login</a>
+            </Link>
+          </li>
+          <li className="nav-item">
+              <Link href="/register">
+                <a className="nav-link">Register</a>
+              </Link>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
   );
 
   return <React.Fragment>{head()} {nav()}<div className="container py-5">{children}</div> </React.Fragment>;
