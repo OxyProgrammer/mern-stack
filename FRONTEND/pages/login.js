@@ -1,22 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Router from 'next/router';
 import Layout from '../components/Layout';
 import axios from 'axios';
 import {showSuccessMessage,showErrorMessage} from '../helpers/alerts';
 import * as config from '../config';
-import {authenticate} from '../helpers/auth';
+import {authenticate,isAuth} from '../helpers/auth';
 import { faSignInAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const login = () => {
 
   const [state,setState]=useState({
-    email: '',
-    password: '',
+    email: 'siddhartha.sarkar28@gmail.com',
+    password: 'Babai@1234',
     error: '',
     success: '',
     buttonText: 'Submit'
+  });
+
+  useEffect(()=>{
+    isAuth() && Router.push('/');
   });
 
   const { email, password, error, success, buttonText } = state;
@@ -27,7 +31,9 @@ const login = () => {
     try{
       const response = await axios.post(`${config.API}/signin`,{ email, password });
       authenticate(response,()=>{
-        Router.push('/');
+        isAuth() && isAuth().role==='admin'
+        ?Router.push('/admin')
+        :Router.push('/user');
       });
     }catch(error){
       setState({...state, buttonText:'Sign In', error:error.response.data.error });
@@ -67,7 +73,7 @@ return(
   <Layout>
     <div className="col-md-6 offset-md-3">
       <div className="card">
-        <h5 className="card-header">SIGN IN<FontAwesomeIcon className="float-sm-right" icon={faSignInAlt}/></h5>  
+        <h5 className="card-header">SIGN IN <FontAwesomeIcon className="float-sm-right" icon={faSignInAlt}/></h5>  
         <div className="card-body">
           {success && showSuccessMessage(success)}
           {error && showErrorMessage(error)}

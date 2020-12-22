@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import Layout from '../components/Layout';
 import axios from 'axios';
+import Router from 'next/router';
 import {showSuccessMessage,showErrorMessage} from '../helpers/alerts';
 import * as config from '../config';
-
+import {isAuth} from '../helpers/auth';
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -16,6 +17,10 @@ const register = () => {
     error: '',
     success: '',
     buttonText: 'Register'
+  });
+
+  useEffect(()=>{
+    isAuth() && Router.push('/');
   });
 
   const { name, email, password, error, success, buttonText } = state;

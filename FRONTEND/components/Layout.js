@@ -3,6 +3,8 @@ import Router from 'next/router';
 import Link from 'next/link';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import {isAuth,signOut} from '../helpers/auth';
+
 
 //#region The following code is responsible for the navbar progress bar.
 //https://nextjs.org/docs/api-reference/next/router
@@ -43,15 +45,47 @@ const layout = ({ children }) => {
                <a className="nav-link">Home</a>
              </Link>
          </li>
+
+          {
+           !isAuth() && (
+             <React.Fragment>
+               <li className="nav-item">
+                <Link href="/login">
+                  <a className="nav-link">Login</a>
+                </Link>
+              </li>
+              <li className="nav-item">
+                  <Link href="/register">
+                    <a className="nav-link">Register</a>
+                  </Link>
+              </li>
+             </React.Fragment>
+           )
+          }
+
+         {
+           isAuth() && isAuth().role==='admin' &&(
+            <li className="nav-item">
+              <Link href="/admin">
+                <a className="nav-link">Admin</a>
+              </Link>
+            </li>
+           )
+         }
+
+        {
+           isAuth() && isAuth().role==='subscriber' &&(
+            <li className="nav-item">
+              <Link href="/user">
+                <a className="nav-link">User</a>
+              </Link>
+            </li>
+           )
+         }
+
+
          <li className="nav-item">
-           <Link href="/login">
-             <a className="nav-link">Login</a>
-           </Link>
-         </li>
-         <li className="nav-item">
-             <Link href="/register">
-               <a className="nav-link">Register</a>
-             </Link>
+            <a onClick={signOut} style={{cursor:"pointer"}} className="nav-link">Logout</a>
          </li>
        </ul>
      </div>
