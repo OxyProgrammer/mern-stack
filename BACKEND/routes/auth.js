@@ -1,20 +1,21 @@
-const express=require('express');
-const router=express.Router();
+const express = require('express');
+const router = express.Router();
 
-//import from controllers
-const {register,registerActivate,signInUser,requireSignIn}=require('../controllers/auth');
+// import validators
+const { userRegisterValidator, userLoginValidator } = require('../validators/auth');
+const { runValidation } = require('../validators');
 
-const {userRegistrationValidator, userSignInValidator}=require('../validators/auth');
-const {runValidation}=require('../validators');
+// import from controllers
+const { register, registerActivate, login, requireSignin } = require('../controllers/auth');
 
+router.post('/register', userRegisterValidator, runValidation, register);
 router.post('/register/activate', registerActivate);
-router.post('/register',userRegistrationValidator,runValidation, register);
-router.post('/signin',userSignInValidator,runValidation,signInUser);
+router.post('/signin', userLoginValidator, runValidation, login);
 
-// router.get('/secret',requireSignIn,(req,res)=>{
-//   res.json({
-//     message:'This is secret page for logged in users only.'
-//   });
-// })
+// router.get('/secret', requireSignin, (req, res) => {
+//     res.json({
+//         data: 'This is secret page for logged in users only'
+//     });
+// });
 
-module.exports=router;
+module.exports = router;
