@@ -31,14 +31,14 @@ const layout = ({ children }) => {
     <div className="container">
       <a className="navbar-brand" href="/">MERN-A</a>
       <button className="custom-toggler navbar-toggler" type="button" 
-            data-toggle="collapse" data-target="#navbarsExample09" 
-            aria-controls="navbarsExample09" 
+            data-toggle="collapse" data-target="#navItemsContainer" 
+            aria-controls="navItemsContainer" 
             aria-expanded={!isNavCollapsed ? true : false} 
             aria-label="Toggle navigation" 
             onClick={handleNavCollapse}>
           <span className="navbar-toggler-icon"></span>
         </button>
-      <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`}>
+      <div id="navItemsContainer" className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`}>
        <ul className="navbar-nav ml-auto">
          <li className="nav-item">
              <Link href="/">
@@ -67,26 +67,28 @@ const layout = ({ children }) => {
            isAuth() && isAuth().role==='admin' &&(
             <li className="nav-item">
               <Link href="/admin">
-                <a className="nav-link">Admin</a>
+                <a className="nav-link">{isAuth().name}</a>
               </Link>
             </li>
            )
          }
 
         {
-           isAuth() && isAuth().role==='subscriber' &&(
+           isAuth() && isAuth().role==='subscriber' && (
             <li className="nav-item">
               <Link href="/user">
-                <a className="nav-link">User</a>
+                <a className="nav-link">{isAuth().name}</a>
               </Link>
             </li>
            )
          }
 
-
-         <li className="nav-item">
-            <a onClick={signOut} style={{cursor:"pointer"}} className="nav-link">Logout</a>
-         </li>
+        {
+          isAuth() && (<li className="nav-item">
+          <a onClick={signOut} style={{cursor:"pointer"}} className="nav-link">Logout</a>
+        </li>)
+        }
+            
        </ul>
      </div>
     </div>
