@@ -11,7 +11,7 @@ For Server
 ----------
 1) First fire: npm init -y
 2) Then install relevant packages: npm install --save express nodemon mongoose body-parser 
-cors dotenv express-jwt express-validator jsonwebtoken aws-sdk morgan shortid express-jwt lodash
+cors dotenv express-jwt express-validator jsonwebtoken aws-sdk morgan shortid express-jwt lodash slugify
 3) Run the server using => npm start
 
 npm install --save @fortawesome/fontawesome-svg-core
@@ -19,3 +19,5 @@ npm install --save @fortawesome/free-solid-svg-icons
 npm install --save @fortawesome/react-fontawesome
 npm install --save @fortawesome/free-brands-svg-icons
 npm install --save @fortawesome/free-regular-svg-icons
+
+
