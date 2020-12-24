@@ -79,7 +79,7 @@ return(
           {error && showErrorMessage(error)}
           {loginForm()}
           <Link href="/auth/password/forgot">
-            <button className="btn btn-primary float-left">Forgot password</button>
+            <a class="btn btn-primary float-left" role="button">Forgot password</a>
             {/* <a className="text-primary float-left"><strong>Forgot password</strong></a> */}
           </Link>
         </div>
