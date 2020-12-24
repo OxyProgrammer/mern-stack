@@ -64,7 +64,7 @@ const login = () => {
             required/>
         </div>
         <div className="form-group">
-          <button className="btn btn-primary float-sm-right">{buttonText}</button>
+          <button className="btn btn-success float-sm-right">{buttonText}</button>
         </div>
       </form>)
   }
@@ -78,6 +78,10 @@ return(
           {success && showSuccessMessage(success)}
           {error && showErrorMessage(error)}
           {loginForm()}
+          <Link href="/auth/password/forgot">
+            <button className="btn btn-primary float-left">Forgot password</button>
+            {/* <a className="text-primary float-left"><strong>Forgot password</strong></a> */}
+          </Link>
         </div>
       </div>
     </div>

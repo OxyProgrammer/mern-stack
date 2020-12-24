@@ -20,7 +20,7 @@ exports.forgotPasswordEmailParams = (email, token) => {
       },
       Subject: {
         Charset: "UTF-8",
-        Data: "Complete your registration",
+        Data: "Reset password at mern-stack.",
       },
     },
   };

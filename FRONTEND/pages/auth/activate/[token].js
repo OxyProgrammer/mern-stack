@@ -14,7 +14,7 @@ const ActivateAccount=({router})=>{
     buttonText:'Activate Account',
     success:'',
     error:''
-  })
+  });
 
   const {name,token,buttonText,success,error}=state;
 
