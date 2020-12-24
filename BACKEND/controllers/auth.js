@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const { registerEmailParams, forgotPasswordEmailParams } = require("../helpers/email");
 const shortId = require("shortid");
+const _=require('lodash');
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -198,4 +199,44 @@ exports.forgotPassword = (req, res, next) => {
   });
 };
 
-exports.resetPassword = (req, res, next) => {};
+exports.resetPassword = (req, res, next) => {
+  const {resetPasswordLink,newPassword}=req.body;
+  if(resetPasswordLink){
+    //check for expiry
+    jwt.verify(resetPasswordLink,process.env.JWT_SECRET,(err,success)=>{
+      if(err){
+        return res.status(400).json({
+          error:'Expired link. Try again.'
+        })
+      }
+      
+      User.findOne({resetPasswordLink}).exec((error,user)=>{
+        if(error || !user){
+          return res.status(400).json({
+            error: "Invalid token. Try again.",
+          });
+        }
+        const updatedFields={
+          password:newPassword,
+          resetPasswordLink:''
+        }
+
+        user=_.extend(user,updatedFields);
+
+        user.save((error,result)=>{
+          if(error || !result){
+            return res.status(400).json({
+              error: "Some problem occurred. Please try later.",
+            });
+          }
+          return res.status(200).json({
+            message: 'Password reset successfully done. Please login using new password.'
+          })
+        })
+      });
+    });
+    
+
+
+  }
+};
