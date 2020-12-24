@@ -52,7 +52,6 @@ exports.register = (req, res) => {
 
 exports.registerActivate = (req, res) => {
     const { token } = req.body;
-    // console.log(token);
     jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, function(err, decoded) {
         if (err) {
             return res.status(401).json({
