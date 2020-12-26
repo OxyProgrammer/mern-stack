@@ -2,9 +2,8 @@ import {useEffect,useState} from 'react';
 import axios from 'axios';
 import {showSuccessMessage,showErrorMessage} from '../../../helpers/alerts';
 import * as config from '../../../config';
-import Router from 'next/router';
 import Layout from '../../../components/Layout';
-import { set } from 'nprogress';
+
 
 const ForgotPassword=(props)=>{
 

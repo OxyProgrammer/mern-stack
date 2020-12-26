@@ -3,7 +3,7 @@ const slugify = require('slugify');
 const formidable=require('formidable');
 const AWS=require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
-
+const fs = require('fs');
 
 const s3=new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -36,7 +36,7 @@ exports.create=(req,res)=>{
     const params={
       Bucket:'mern-stack-app-bucket',
       Key:`category/${uuidv4()}`,
-      Body: image.path,
+      Body: fs.readFileSync(image.path),
       ACL: 'public-read',
       ContentType:`image/jpg`
     }
