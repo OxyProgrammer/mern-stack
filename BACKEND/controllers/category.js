@@ -3,7 +3,6 @@ const slugify = require('slugify');
 const formidable=require('formidable');
 const AWS=require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
-const { json } = require('body-parser');
 
 
 const s3=new AWS.S3({
@@ -15,9 +14,8 @@ const s3=new AWS.S3({
 exports.create=(req,res)=>{
 
   let form=new formidable.IncomingForm();
-  console.log(form)
+  
   form.parse(req,(error,fields,files)=>{
-    console.table(error,fields,files);
     if(error){
       return res.status(400).json({
         error:"Image could not upload"
@@ -44,8 +42,10 @@ exports.create=(req,res)=>{
     }
 
     //s3 upload
-    s3.upload(params,(err,data)=>{
+    s3.upload(params,(error,data)=>{
+      
       if(error){
+       
         return res.status(400).json({
           error:"Upload to s3 failed."
         });
@@ -55,13 +55,14 @@ exports.create=(req,res)=>{
       category.image.key=data.Key;
 
       // save to db
-      category.save((err,success)=>{
+      category.save((error,success)=>{
         if(error){
+          console.log(error)
           return res.status(400).json({
             error:"Error saving category to database."
           });
         }
-        return json(success);
+        return res.json(success);
       });
     });
   });
