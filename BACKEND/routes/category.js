@@ -10,8 +10,8 @@ const { runValidation } = require("../validators");
 const { requireSignin, authMiddleware, adminMiddleware } = require('../controllers/auth');
 const{create,list,update,read,remove}=require('../controllers/category');
 
-//routes
-router.post('/category',categoryCreateValidator,runValidation,requireSignin,adminMiddleware,create);
+//routes categoryCreateValidator,runValidation,
+router.post('/category',requireSignin,adminMiddleware,create);
 router.get('/categories',list);
 router.get('/category/:slug',read);
 router.put('/category/:slug',categoryUpdateValidator,runValidation,requireSignin,adminMiddleware,update);

@@ -1,26 +1,69 @@
 const Category = require('../models/category');
 const slugify = require('slugify');
+const formidable=require('formidable');
+const AWS=require('aws-sdk');
+const { v4: uuidv4 } = require('uuid');
+const { json } = require('body-parser');
 
-exports.create = (req, res) => {
-  const {name,content} = req.body;
-  const slug = slugify(name);
-  const image={
-    url:`https://via.placeholder.com/200x150.png?text=${process.env.CLIENT_URL}`,
-    key:'123'
-  };
 
-  const category=new Category({name,image,slug,content});
+const s3=new AWS.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION
+});
 
-  category.postedBy=req.user._id;
+exports.create=(req,res)=>{
 
-  category.save((error,data)=>{
+  let form=new formidable.IncomingForm();
+  console.log(form)
+  form.parse(req,(error,fields,files)=>{
+    console.table(error,fields,files);
     if(error){
-      console.log('CATEGORY CREATE ERROR:',error);
       return res.status(400).json({
-        error:'Category creation failed'
+        error:"Image could not upload"
       });
     }
-    res.status(200).json({message:'Category saved successfully!'})
+    
+    const {name,content}=fields;
+    const {image}=files;
+    const slug = slugify(name);
+    let category=new Category({name,content,slug});
+    if(image.size>2000000){
+      return res.status(400).json({
+        error:"Image should be less than 2 MB"
+      });
+    }
+
+    //upload image to s3
+    const params={
+      Bucket:'mern-stack-app-bucket',
+      Key:`category/${uuidv4()}`,
+      Body: image.path,
+      ACL: 'public-read',
+      ContentType:`image/jpg`
+    }
+
+    //s3 upload
+    s3.upload(params,(err,data)=>{
+      if(error){
+        return res.status(400).json({
+          error:"Upload to s3 failed."
+        });
+      }
+      console.log('AWS UPLOAD RES DATA ',data);
+      category.image.url=data.Location;
+      category.image.key=data.Key;
+
+      // save to db
+      category.save((err,success)=>{
+        if(error){
+          return res.status(400).json({
+            error:"Error saving category to database."
+          });
+        }
+        return json(success);
+      });
+    });
   });
 }
 
