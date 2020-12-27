@@ -69,6 +69,14 @@ exports.create=(req,res)=>{
 }
 
 exports.list = (req, res) => {
+  Category.find({}).exec((err,data)=>{
+    if(err){
+      return res.res.status(400).json({
+        error:'Categories could not load.'
+      });
+    }
+    res.json(data);
+  });
 }
 
 exports.read = (req, res) => {
