@@ -7,7 +7,8 @@ import {showSuccessMessage,showErrorMessage} from '../../../helpers/alerts';
 import { faListAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const create=()=>{
+const create=({user,token})=>{
+
   const [state,setState]=useState({
     name:'',
     content:'',
@@ -31,7 +32,28 @@ const create=()=>{
   const handleSubmit=async event =>{
     event.preventDefault();
     setState({ ...state, buttonText:'Creating...' });
-    console.log(...formData);
+    try{
+      const response=await axios.post(`${config.API}/category`,formData,{
+        headers:{
+          Authorization : `Bearer ${token}`
+        }
+      });
+      setState({...state,
+                name:'',
+                content:'',
+                formData:'',
+                buttonText:'Created',
+                success:'Category created.',
+                error:'', 
+                imageUploadText:'Upload image'});
+    }catch(error){
+      console.log('CATEGORY CREATE ERROR',error);
+      setState({...state,name:'',
+                formData:'',
+                buttonText:'Create', 
+                success:'',
+                error:error.response.data.error});
+    }
   }
 
   const createCategoryForm=()=>{
@@ -85,4 +107,4 @@ const create=()=>{
   )
 }
 
-export default create;
+export default withAdmin(create);

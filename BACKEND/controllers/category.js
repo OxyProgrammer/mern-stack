@@ -38,7 +38,7 @@ exports.create=(req,res)=>{
       Key:`category/${uuidv4()}`,
       Body: fs.readFileSync(image.path),
       ACL: 'public-read',
-      ContentType:`image/jpg`
+      ContentType:`image/png`
     }
 
     //s3 upload
