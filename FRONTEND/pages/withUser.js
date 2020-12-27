@@ -28,7 +28,6 @@ const withUser=Page=>{
         Location:'/'
       });
     }else{
-      console.log(user)
       return {...(Page.getInitialProps?await Page.getInitialProps(context):{}),user,token}
     }
   }

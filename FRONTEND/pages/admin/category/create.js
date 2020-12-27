@@ -1,39 +1,67 @@
+import dynamic from 'next/dynamic';
 import Layout from '../../../components/Layout';
 import withAdmin from '../../withAdmin';
-import { useState,useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+const ReactQuill = dynamic(()=>import ('react-quill'), {ssr:false});
 import * as config from '../../../config';
 import {showSuccessMessage,showErrorMessage} from '../../../helpers/alerts';
 import { faListAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Resizer from 'react-image-file-resizer';
+import 'react-quill/dist/quill.bubble.css';
+
 
 const create=({user,token})=>{
 
   const [state,setState]=useState({
     name:'',
-    content:'',
     error:'',
     success:'',
-    formData:process.browser && new FormData(),
-    buttonText:'Create',
-    imageUploadText:'Upload Image'
-  });
+    image:'',
+    buttonText:'Create'    
+  });  
+  const [content, setContent] = useState('');
+  const [imageUploadText,setImageUploadText]=useState('Upload Image');
 
-  const{name,content,error,success,formData,buttonText,imageUploadText}=state;
+  const{name,error,image,success,buttonText}=state;
+
+  const handleContent = event =>{
+    console.log(event)
+    setContent(event);
+    setState({...state, error: '', success: ''})
+  }
+  const handleImage=(event)=>{
+    let fileInput = false;
+    if(event.target.files[0]) {
+        fileInput = true;
+    }
+    if(fileInput) {
+      setImageUploadText(event.target.files[0].name);
+        Resizer.imageFileResizer(
+            event.target.files[0],
+            300,
+            300,
+            'JPEG',
+            100,
+            0,
+            uri => {
+                setState({...state,image:uri,success:'',error:''});
+            },
+            'base64'
+        );
+    }
+  }
 
   const handleChange = inputId => event => {
-    const value = inputId === 'image' ? event.target.files[0] : event.target.value;
-    const imageName = inputId === 'image' ? event.target.files[0].name : 'Upload image';
-    formData.set(inputId,value);
-
-    setState({ ...state, [inputId]: value, error: '', success: '',imageUploadText:imageName });
+    setState({ ...state, [inputId]: event.target.value, error: '', success: ''});
   };
 
   const handleSubmit=async event =>{
     event.preventDefault();
     setState({ ...state, buttonText:'Creating...' });
     try{
-      const response=await axios.post(`${config.API}/category`,formData,{
+      const response=await axios.post(`${config.API}/category`,{name,content,image},{
         headers:{
           Authorization : `Bearer ${token}`
         }
@@ -41,18 +69,19 @@ const create=({user,token})=>{
       setState({...state,
                 name:'',
                 content:'',
-                formData:'',
+                image:'',
                 buttonText:'Created',
                 success:'Category created.',
-                error:'', 
-                imageUploadText:'Upload image'});
+                error:''});
+      setImageUploadText('Upload Image');
     }catch(error){
-      console.log('CATEGORY CREATE ERROR',error);
       setState({...state,name:'',
-                formData:'',
+                image:'',
+                content:'',
                 buttonText:'Create', 
                 success:'',
                 error:error.response.data.error});
+      setImageUploadText('Upload Image');
     }
   }
 
@@ -69,16 +98,25 @@ const create=({user,token})=>{
 
         <div className="form-group">
           <label className="text-muted">Content</label>
-          <textarea onChange={handleChange('content')} 
+          {/* <textarea onChange={handleChange('content')} 
                 value={content}
                 className="form-control" 
-                required/>
+                required/> */}
+                <ReactQuill
+                value={content}
+                onChange={handleContent}
+                placeholder='Write something...'
+                className="pb-5 mb-3"
+                theme="bubble"
+                style={{border:'1px solid #666'}}>
+
+                </ReactQuill>
         </div>
 
         <div className="form-group">
           <label className="btn btn-outline-primary">
             {imageUploadText}
-            <input onChange={handleChange('image')} 
+            <input onChange={handleImage} 
                   type="file" 
                   accept="image/*"
                   className="form-control" 
