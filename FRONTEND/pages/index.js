@@ -8,12 +8,13 @@ const getCategory=(category)=>{
   return (
     <div className="card" >
       <h5 className="card-header">{category.name}</h5>  
-        <div className="card-body">
-        <img 
-          style={{width: "200px", height: "200px"}} 
+      <img className="fluid thumbnail"
+          style={{"height": "150px"}} 
           src={category.image.url} 
           alt="Card image cap"></img>
-        </div>
+        {/* <div className="card-body">
+       
+        </div> */}
       <div className="card-footer">
         <button className="btn btn-outline-success float-sm-right">See more...</button>
       </div>
@@ -22,7 +23,7 @@ const getCategory=(category)=>{
 }
 
 const getCategoriesUi=(categories)=>{
-  return categories.map(category=><div key={category._id} className="col-sm-12-md-6-lg-3 mx-2 my-2">
+  return categories.map(category=><div key={category._id} className="col-sm-12 col-md-4 col-lg-3 my-2">
         {getCategory(category)}
       </div>);
 }
@@ -30,11 +31,11 @@ const getCategoriesUi=(categories)=>{
 const home = ({categories}) => {
   return(
     <Layout>
-      <div class="container">
-        <div class="row">
+      <div className="container">
+        <div className="row">
           <h4 className="mx-2">Browse Tutorials / Courses</h4>
         </div>
-        <div class="row">
+        <div className="row">
           {getCategoriesUi(categories)}
         </div>
       </div>

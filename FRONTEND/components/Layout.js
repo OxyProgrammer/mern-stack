@@ -46,6 +46,12 @@ const layout = ({ children }) => {
              </Link>
          </li>
 
+         <li className="nav-item">
+             <Link href="/user/link/create">
+               <a className="nav-link btn btn-success">Submit a link</a>
+             </Link>
+         </li>
+
           {
            !isAuth() && (
              <React.Fragment>
