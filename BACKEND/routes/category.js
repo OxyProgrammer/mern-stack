@@ -7,7 +7,7 @@ const {  categoryCreateValidator,  categoryUpdateValidator} = require("../valida
 const { runValidation } = require("../validators");
 
 // import from controllers
-const { requireSignin, authMiddleware, adminMiddleware } = require('../controllers/auth');
+const { requireSignin, adminMiddleware } = require('../controllers/auth');
 const{create,list,update,read,remove}=require('../controllers/category');
 
 //routes  
