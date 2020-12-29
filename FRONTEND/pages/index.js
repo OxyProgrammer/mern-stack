@@ -16,7 +16,7 @@ const getCategory=(category)=>{
        
         </div> */}
       <div className="card-footer">
-        <button className="btn btn-outline-success float-sm-right">See more...</button>
+        <button className="btn btn-sm btn-outline-success float-sm-right">See more...</button>
       </div>
     </div>
   );
