@@ -1,15 +1,16 @@
-import {useEffect,useState} from 'react';
+import {useEffect,useState, Fragment} from 'react';
 import axios from 'axios';
 import * as config from '../../../config';
 import Layout from '../../../components/Layout';
 import {showSuccessMessage,showErrorMessage} from '../../../helpers/alerts';
+import react from 'react';
 
 const create=()=>{
 
   const [state,setState]=useState({
     title:'',
     url:'',
-    categories:'',
+    categories:[],
     loadedCategories:[],
     success:'',
     error:'',
@@ -18,6 +19,10 @@ const create=()=>{
   });
 
   const {title,url,categories,loadedCategories,success,error,medium,type}=state;
+  
+  useEffect(()=>{
+    loadCategories()
+  },[success]);
 
   const handleTitleChange = event=>{
     setState({...state, title:event.target.value,error:'',success:''});
@@ -27,11 +32,7 @@ const create=()=>{
     setState({...state, url:event.target.value,error:'',success:''});
   }
 
-  const handleSubmit = async event=>{
-    
-  }
-
-  const submitLinkFrom=()=>{
+  const getSubmitLinkForm=()=>{
     return (<form onSubmit={handleSubmit}>
       <div className="form-group">
         <label className="text-muted">Title</label>
@@ -49,6 +50,15 @@ const create=()=>{
     </form>)
   }
 
+  const showCategories=()=>{
+    return loadedCategories.map(category=>(
+      <li className='list-unstyled' key={category._id}>
+        <input type="checkbox" className="my-2" onChange={event=>handleToggle(event,category)}></input>
+        <label className="form-check-label ml-1">{category.name}</label>
+      </li>
+    ));
+  }
+
   const loadCategories = async ()=>{
     try{
       const response=await axios.get(`${config.API}/categories`);
@@ -58,10 +68,83 @@ const create=()=>{
     }
   }
 
-  useEffect(()=>{
-    loadCategories()
-  },[success])
+  const handleToggle=(event,category)=>{
 
+    const clickedCategory = categories.indexOf(category);
+
+    const all = [...categories];
+
+    if(clickedCategory === -1){
+      all.push(category);
+    }else{
+      all.splice(clickedCategory, 1);
+    }
+
+    setState({...state, categories:all, success:'', error:''});
+  }
+
+  const showTypes = ()=>(
+    <Fragment>
+      <div className="form-check ml-3">
+        <label className="form-check-label">
+          <input type="radio" 
+            onChange={handleTypeClick} 
+            checked={type === 'free'} 
+            value="free" 
+            name="type"/>
+          Free
+        </label>
+      </div>
+      <div className="form-check ml-3">
+        <label className="form-check-label">
+          <input type="radio" 
+            onChange={handleTypeClick} 
+            checked={type === 'paid'} 
+            value="paid" 
+            name="type"/>
+          Paid
+          </label>
+      </div>
+    </Fragment>
+  );
+
+  const handleTypeClick = event =>{
+    setState({...state, type: event.target.value, success:'', error:''});
+  }
+
+  const showMedium = ()=>(
+    <Fragment>
+      <div className="form-check ml-3">
+        <label className="form-check-label">
+          <input type="radio" 
+            onChange={handleMediumClick} 
+            checked={medium === 'video'} 
+            value="video" 
+            name="medium"/>
+          Video
+        </label>
+      </div>
+        <div className="form-check ml-3">
+        <label className="form-check-label">
+          <input type="radio" 
+            onChange={handleMediumClick} 
+            checked={medium === 'book'} 
+            value="book" 
+            name="medium"/>
+          Book
+        </label>
+      </div>
+    </Fragment>
+  );
+
+  const handleMediumClick = event =>{
+    setState({...state, medium: event.target.value, success:'', error:''});
+  }
+
+  const handleSubmit = async event=>{
+    event.preventDefault();
+    console.table({title,url,categories,success,error,medium,type});
+  }
 
   return(
     <Layout>
@@ -70,10 +153,24 @@ const create=()=>{
           <h3>Submit Link/URL</h3>
           <br/>
           <div className="row">
-            <div className="col-md-4">XXXX</div>
-            <div className="col-md-8">{submitLinkFrom()}</div>
+            <div className="col-md-4">
+              <div className="form-group">
+                <label className="text-muted ml-4">Category</label>
+                <ul style={{maxHeight:'150px', overflowY:'scroll'}}>{showCategories()}</ul>
+              </div>
+              <div className="form-group">
+                <label className="text-muted ml-4">Type</label>
+                {showTypes()}
+              </div>
+              <div className="form-group">
+                <label className="text-muted ml-4">Medium</label>
+                {showMedium()}
+              </div>
+            </div>
+            <div className="col-md-8">{getSubmitLinkForm()}</div>
           </div>
         </div>
+        {JSON.stringify(medium)}
       </div>
     </Layout>);
 }
