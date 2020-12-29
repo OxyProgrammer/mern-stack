@@ -7,18 +7,15 @@ import Link from 'next/link';
 //Utility method and hence doesnt need recreation.
 const getCategory=(category)=>{
   return (
-    <div className="card" >
+    <div className="card text-white bg-dark " >
       <h5 className="card-header">{category.name}</h5>  
       <img className="fluid thumbnail"
           style={{"height": "150px"}} 
           src={category.image.url} 
           alt="Card image cap"></img>
-        {/* <div className="card-body">
-       
-        </div> */}
       <div className="card-footer">
         {/* <button className="btn btn-sm btn-outline-success float-sm-right">See more...</button> */}
-        <Link href="/"><a className="text-success float-sm-right">See links...</a></Link>
+        <Link href={`/links/${category.slug}`}><a className="text-success float-sm-right">See links...</a></Link>
       </div>
     </div>
   );

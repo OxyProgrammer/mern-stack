@@ -27,7 +27,6 @@ const create=({user,token})=>{
   const{name,error,image,success,buttonText}=state;
 
   const handleContent = event =>{
-    console.log(event)
     setContent(event);
     setState({...state, error: '', success: ''})
   }
@@ -95,22 +94,16 @@ const create=({user,token})=>{
               className="form-control" 
               required/>
         </div>
-
         <div className="form-group">
           <label className="text-muted">Content</label>
-          {/* <textarea onChange={handleChange('content')} 
-                value={content}
-                className="form-control" 
-                required/> */}
-                <ReactQuill
-                value={content}
-                onChange={handleContent}
-                placeholder='Write something...'
-                className="pb-5 mb-3"
-                theme="bubble"
-                style={{border:'1px solid #666'}}>
-
-                </ReactQuill>
+          <ReactQuill
+            value={content}
+            onChange={handleContent}
+            placeholder='Write something...'
+            className="pb-5 mb-3"
+            theme="bubble"
+            style={{border:'1px solid #666'}}>
+          </ReactQuill>
         </div>
 
         <div className="form-group">

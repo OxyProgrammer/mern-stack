@@ -34,7 +34,7 @@ const linkSchema = new mongoose.Schema(
       type:String,
       default: 'Free'
     },
-    meduim:{
+    medium:{
       type:String,
       default: 'Video'
     },
