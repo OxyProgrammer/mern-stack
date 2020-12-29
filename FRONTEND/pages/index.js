@@ -2,6 +2,7 @@ import Layout from '../components/Layout';
 import axios from 'axios';
 import * as config from '../config';
 import Resizer from 'react-image-file-resizer';
+import Link from 'next/link';
 
 //Utility method and hence doesnt need recreation.
 const getCategory=(category)=>{
@@ -16,7 +17,8 @@ const getCategory=(category)=>{
        
         </div> */}
       <div className="card-footer">
-        <button className="btn btn-sm btn-outline-success float-sm-right">See more...</button>
+        {/* <button className="btn btn-sm btn-outline-success float-sm-right">See more...</button> */}
+        <Link href="/"><a className="text-success float-sm-right">See links...</a></Link>
       </div>
     </div>
   );

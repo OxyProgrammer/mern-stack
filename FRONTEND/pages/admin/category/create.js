@@ -114,7 +114,7 @@ const create=({user,token})=>{
         </div>
 
         <div className="form-group">
-          <label className="btn btn-outline-primary">
+          <label className="btn btn-sm mt-2 btn-primary float-left">
             {imageUploadText}
             <input onChange={handleImage} 
                   type="file" 
@@ -123,9 +123,7 @@ const create=({user,token})=>{
                   hidden/>
           </label>
         </div>
-        <div >
-          <button className="btn btn-success float-sm-right">{buttonText}</button>
-        </div>
+        <button className="btn btn-success float-sm-right">{buttonText}</button>
     </form>);
   }
 
