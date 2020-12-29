@@ -7,23 +7,23 @@ import renderHTML from 'react-render-html';
 
 const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
 
-  const [allLinks, setAllLinks] = useState({...links});
+  const [allLinks, setAllLinks] = useState(links);
   
   const listOfLinks = () => {
-    allLinks.map((link,idx)=>{
-      return (<div key={idx} className="row alert alert-primary p-2">
-        <div className="col-md-9">
+    return allLinks.map((link,idx)=>{
+      return (
+        <div key={idx} className="col-md-9 alert alert-primary">
           {link.title}
         </div>
-      </div>);
-    })
+        );
+    });
   }
 
   return(
     <Layout>
       <div className="row">
-        <div class="col-md-9 font-weight-bold alert alert-success" role="alert">
-          <h4 class="alert-heading">{category.name} - URL/Links</h4>
+        <div className="col-md-9 font-weight-bold alert alert-success" role="alert">
+          <h4 className="alert-heading">{category.name} - URL/Links</h4>
           <hr/>
           <p>{renderHTML(category.content || '')}</p>
         </div>
@@ -32,8 +32,8 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
         </div>
       </div>
       <div className="row">
-        {JSON.stringify(links)}
-        {/* {listOfLinks()} */}
+        {/* {JSON.stringify(allLinks.length)} */}
+        {listOfLinks()}
       </div>
     </Layout>
   )
