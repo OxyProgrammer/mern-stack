@@ -9,7 +9,8 @@ exports.create=(req,res)=>{
   const link=new Link({title,slug,url,categories,type,medium});
   link.postedBy=req.user._id;
   //categories
-  const arrayOfCategories = categories && categories.split(',');
+  const arrayOfCategories = categories && categories.map(c=>c._id);
+  console.log(arrayOfCategories);
   link.categories = arrayOfCategories;
 
   link.save((error,data)=>{

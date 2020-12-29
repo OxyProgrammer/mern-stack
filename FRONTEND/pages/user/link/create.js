@@ -2,10 +2,11 @@ import {useEffect,useState, Fragment} from 'react';
 import axios from 'axios';
 import * as config from '../../../config';
 import Layout from '../../../components/Layout';
+import {getCookie, isAuth} from '../../../helpers/auth';
 import {showSuccessMessage,showErrorMessage} from '../../../helpers/alerts';
 import react from 'react';
 
-const create=()=>{
+const create=({token})=>{
 
   const [state,setState]=useState({
     title:'',
@@ -45,7 +46,9 @@ const create=()=>{
       </div>
 
       <div>
-        <button className="btn btn-success float-right" type="submit">Submit</button>
+        <button disabled={!token} className="btn btn-success float-right" type="submit">
+          {isAuth() || token ? 'Post' : 'Login to post'}
+        </button>
       </div>
     </form>)
   }
@@ -143,7 +146,26 @@ const create=()=>{
 
   const handleSubmit = async event=>{
     event.preventDefault();
-    console.table({title,url,categories,success,error,medium,type});
+    try{
+      const response = axios.post(`${config.API}/link`,{title,url,categories,type,medium},{
+        headers:{
+          Authorization:`Bearer ${token}`
+        }
+      })
+      setState({
+                ...state, 
+                title:'',
+                url:'', 
+                success:'Link is created', 
+                error:'', 
+                categories:[], 
+                type:'', 
+                medium:'', 
+                loadedCategories:[],})
+    }catch(error){
+      setState({...state, error:error.response.data.error});
+      console.log(error);
+    }
   }
 
   return(
@@ -167,12 +189,20 @@ const create=()=>{
                 {showMedium()}
               </div>
             </div>
-            <div className="col-md-8">{getSubmitLinkForm()}</div>
+            <div className="col-md-8">
+              {success && showSuccessMessage(success)}
+              {error && showErrorMessage(error)}
+              {getSubmitLinkForm()}
+            </div>
           </div>
         </div>
-        {JSON.stringify(medium)}
       </div>
     </Layout>);
+}
+
+create.getInitialProps=({req})=>{
+  const token = getCookie('token', req);
+  return {token};
 }
 
 export default create;
