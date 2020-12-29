@@ -13,7 +13,7 @@ const login = () => {
 
   const [state,setState]=useState({
     email: 'siddhartha.sarkar28@gmail.com',
-    password: 'Babai@1234',
+    password: 'Babai@12345',
     error: '',
     success: '',
     buttonText: 'Submit'
@@ -79,7 +79,7 @@ return(
           {error && showErrorMessage(error)}
           {loginForm()}
           <Link href="/auth/password/forgot">
-            <a href="#" className="text-danger text-uppercase font-weight-bold float-left my-2" role="button">Forgot password</a>
+            <a href="#" className="text-danger text-uppercase font-weight-bold float-left mt-2" role="button">Forgot password</a>
             {/* <a className="text-primary float-left"><strong>Forgot password</strong></a> */}
           </Link>
         </div>

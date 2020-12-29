@@ -27,7 +27,7 @@ const layout = ({ children }) => {
     </React.Fragment>
   );
 
-  const nav = () => ( <div className="navbar navbar-expand-lg navbar-dark bg-dark">
+  const nav = () => ( <div className="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
     <div className="container">
       <a className="navbar-brand" href="/">MERN-A</a>
       <button className="custom-toggler navbar-toggler" type="button" 
@@ -42,13 +42,13 @@ const layout = ({ children }) => {
        <ul className="navbar-nav ml-auto">
          <li className="nav-item">
              <Link href="/">
-               <a className="nav-link">Home</a>
+               <a className="nav-link">HOME</a>
              </Link>
          </li>
 
          <li className="nav-item">
              <Link href="/user/link/create">
-               <a className="nav-link btn btn-success">Submit a link</a>
+               <a className="nav-link text-success">SUBMIT LINK</a>
              </Link>
          </li>
 
@@ -57,12 +57,12 @@ const layout = ({ children }) => {
              <React.Fragment>
                <li className="nav-item">
                 <Link href="/login">
-                  <a className="nav-link">Login</a>
+                  <a className="nav-link">LOGIN</a>
                 </Link>
               </li>
               <li className="nav-item">
                   <Link href="/register">
-                    <a className="nav-link">Register</a>
+                    <a className="nav-link">REGISTER</a>
                   </Link>
               </li>
              </React.Fragment>
@@ -83,7 +83,7 @@ const layout = ({ children }) => {
            isAuth() && isAuth().role==='subscriber' && (
             <li className="nav-item">
               <Link href="/user">
-                <a className="nav-link">{isAuth().name}</a>
+                <a className="nav-link">{isAuth().name.toUpper()}</a>
               </Link>
             </li>
            )
@@ -91,7 +91,7 @@ const layout = ({ children }) => {
 
         {
           isAuth() && (<li className="nav-item">
-          <a onClick={signOut} style={{cursor:"pointer"}} className="nav-link">Logout</a>
+          <a onClick={signOut} style={{cursor:"pointer"}} className="nav-link font-weight-bold">LOGOUT</a>
         </li>)
         }
             

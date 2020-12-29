@@ -36,17 +36,15 @@ const create=({token})=>{
   const getSubmitLinkForm=()=>{
     return (<form onSubmit={handleSubmit}>
       <div className="form-group">
-        <label className="text-muted">Title</label>
-        <input type="text" className="form-control" onChange={handleTitleChange} value={title}></input>
+        <input type="text" className="form-control" placeholder="Enter Title..." onChange={handleTitleChange} value={title}></input>
       </div>
 
       <div className="form-group">
-        <label className="text-muted">URL</label>
-        <input type="text" className="form-control" onChange={handleURLChange} value={url}></input>
+        <input type="text" className="form-control" placeholder="Enter URL..." onChange={handleURLChange} value={url}></input>
       </div>
 
       <div>
-        <button disabled={!token} className="btn btn-success float-right" type="submit">
+        <button disabled={!token} className="btn btn-sm btn-success float-right" type="submit">
           {isAuth() || token ? 'Post' : 'Login to post'}
         </button>
       </div>
@@ -54,11 +52,10 @@ const create=({token})=>{
   }
 
   const showCategories=()=>{
-    return loadedCategories.map(category=>(
-      <li className='list-unstyled' key={category._id}>
-        <input type="checkbox" className="my-2" onChange={event=>handleToggle(event,category)}></input>
-        <label className="form-check-label ml-1">{category.name}</label>
-      </li>
+    return loadedCategories.map(category=>(<div className="form-check" key={category._id}>
+        <input className="form-check-input" type="checkbox" value="" onChange={event=>handleToggle(event,category)}/>
+        <label className="form-check-label">{category.name}</label>
+      </div>
     ));
   }
 
@@ -88,25 +85,13 @@ const create=({token})=>{
 
   const showTypes = ()=>(
     <Fragment>
-      <div className="form-check ml-3">
-        <label className="form-check-label">
-          <input type="radio" 
-            onChange={handleTypeClick} 
-            checked={type === 'free'} 
-            value="free" 
-            name="type"/>
-          Free
-        </label>
+      <div className="form-check">
+        <input className="form-check-input" type="radio" name="type" value="free" onChange={handleTypeClick} checked={type === 'free'} />
+        <label className="form-check-label">Free</label>
       </div>
-      <div className="form-check ml-3">
-        <label className="form-check-label">
-          <input type="radio" 
-            onChange={handleTypeClick} 
-            checked={type === 'paid'} 
-            value="paid" 
-            name="type"/>
-          Paid
-          </label>
+      <div className="form-check">
+        <input className="form-check-input" type="radio" name="type" value="paid" onChange={handleTypeClick} checked={type === 'paid'} />
+        <label className="form-check-label">Paid</label>
       </div>
     </Fragment>
   );
@@ -117,25 +102,13 @@ const create=({token})=>{
 
   const showMedium = ()=>(
     <Fragment>
-      <div className="form-check ml-3">
-        <label className="form-check-label">
-          <input type="radio" 
-            onChange={handleMediumClick} 
-            checked={medium === 'video'} 
-            value="video" 
-            name="medium"/>
-          Video
-        </label>
+      <div className="form-check">
+        <input className="form-check-input" type="radio" name="medium" value="video" onChange={handleMediumClick} checked={medium === 'video'} />
+        <label className="form-check-label">Video</label>
       </div>
-        <div className="form-check ml-3">
-        <label className="form-check-label">
-          <input type="radio" 
-            onChange={handleMediumClick} 
-            checked={medium === 'book'} 
-            value="book" 
-            name="medium"/>
-          Book
-        </label>
+      <div className="form-check">
+        <input className="form-check-input" type="radio" name="medium" value="book" onChange={handleMediumClick} checked={medium === 'book'} />
+        <label className="form-check-label">Book</label>
       </div>
     </Fragment>
   );
@@ -175,21 +148,34 @@ const create=({token})=>{
           <h3>Submit Link/URL</h3>
           <br/>
           <div className="row">
-            <div className="col-md-4">
+            <div className="col-sm-4">
               <div className="form-group">
-                <label className="text-muted ml-4">Category</label>
-                <ul style={{maxHeight:'150px', overflowY:'scroll'}}>{showCategories()}</ul>
+                <div className='card'>
+                  <h5 className="card-header">Category</h5> 
+                  <div className="card-body" style={{maxHeight:'150px', overflowY:'auto'}}>
+                    {showCategories()}
+                  </div>
+                </div>
+                
               </div>
               <div className="form-group">
-                <label className="text-muted ml-4">Type</label>
-                {showTypes()}
+                <div className='card'>
+                  <h5 className="card-header">Type</h5> 
+                  <div className="card-body">
+                    {showTypes()}
+                  </div>
+                </div>
               </div>
               <div className="form-group">
-                <label className="text-muted ml-4">Medium</label>
-                {showMedium()}
+                <div className='card'>
+                  <h5 className="card-header">Medium</h5> 
+                  <div className="card-body">
+                  {showMedium()}
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="col-md-8">
+            <div className="col-sm-8">
               {success && showSuccessMessage(success)}
               {error && showErrorMessage(error)}
               {getSubmitLinkForm()}
