@@ -76,10 +76,10 @@ exports.list = (req, res) => {
 
 exports.read = (req, res) => {
 
-  const {slug, limitItems, skipItems} = req.params;
+  const {slug} = req.params;
 
-  const limit=limitItems?parseInt(limitItems):10;
-  const skip=skipItems?parseInt(skipItems):0;
+  let limit = req.body.limitItems ? parseInt(req.body.limitItems) : 10;
+  let skip = req.body.skipItems ? parseInt(req.body.skipItems) : 0;
 
   Category.findOne({slug})
   .populate('postedBy','_id name username')

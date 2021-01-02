@@ -9,7 +9,10 @@ import moment from 'moment';
 const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
 
   const [allLinks, setAllLinks] = useState(links);
-  
+  const [limit, setLimit] = useState(linksLimit);
+  const [skip, setSkip] = useState(linksSkip);
+  const [size, setSize] = useState(totalLinks);
+
   const listOfPopularLinks=()=>{
     return (<div className="row">
      <div className="col-md-12 alert alert-primary">
@@ -50,6 +53,27 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
     });
   }
 
+  const loadMore=async ()=>{
+    let toSkip = skip + limit;
+    const response = await axios.post(`${config.API}/category/${query.slug}`,{
+      skipItems:toSkip,
+      limitItems:limit
+    });
+    setAllLinks([...allLinks,...response.data.links]);
+    setSize(response.data.links.length);
+    setSkip(toSkip);
+  }
+
+  const loadMoreButton=()=>{
+    let button=null;
+    if(size > 0 && size >= limit){
+      button = (<button onClick={loadMore} className="btn btn-outline-primary btn-sm float-right">
+                  Load more...
+                </button>);
+    }
+    return button;
+  }
+
   return(
     <Layout>
       <div className="row">
@@ -77,6 +101,9 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
           {listOfLinks()} 
         </div>
       </div>
+      <div className="text-center pt-4 pb-5">
+        {loadMoreButton()}
+      </div>
     </Layout>
   )
 }
@@ -92,7 +119,7 @@ links.getInitialProps = async ({query, request})=>{
     query,
     category: response.data.category,
     links: response.data.links,
-    totalLinks:response.data.links,
+    totalLinks:response.data.links.length,
     linksLimit:limitItems,
     linksSkip:skipItems
   };
