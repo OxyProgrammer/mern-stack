@@ -120,7 +120,7 @@ const create=({token})=>{
   const handleSubmit = async event=>{
     event.preventDefault();
     try{
-      const response = axios.post(`${config.API}/link`,{title,url,categories,type,medium},{
+      const response = await axios.post(`${config.API}/link`,{title,url,categories,type,medium},{
         headers:{
           Authorization:`Bearer ${token}`
         }
