@@ -9,7 +9,11 @@ require('dotenv').config();
 const app = express();
 
 //db
-mongoose.connect(process.env.DATABASE_CLOUD,{useNewUrlParser: true,useUnifiedTopology: true,useCreateIndex:true  })
+mongoose.connect(process.env.DATABASE_CLOUD,{
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex:true,
+  useFindAndModify:false  })
 .then(()=>console.log('DB Connected'))
 .catch(error=>console.log(error));
 
