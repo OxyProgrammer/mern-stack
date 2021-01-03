@@ -6,6 +6,15 @@ import Link from 'next/link';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
 
+//The following is a utility method and hence need not be created repeatedly for every re render.
+//Hence the method is kept outside the component body.
+const getDeepCopyOfLink=link=>{
+      const newLink = {...link};
+      newLink.categories = [...link.categories];
+      newLink.postedBy = {...link.postedBy};
+      return newLink;
+}
+
 const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
 
   const [allLinks, setAllLinks] = useState(links);
@@ -27,12 +36,26 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
     </div>)
   }
 
+  const handleLinkClick = async link =>{
+    try{
+      const response = await axios.put(`${config.API}/click-count`,{linkId:link._id});
+      const indexOfLink=allLinks.indexOf(link);
+      const allLinksCopy=[...allLinks];
+      const newLink = getDeepCopyOfLink(link);
+      newLink.clicks = response.data.clicks;
+      allLinksCopy.splice(indexOfLink, 1, newLink);
+      setAllLinks(allLinksCopy);
+    }catch(error){
+      console.log(error);
+    }
+  }
+
   const listOfLinks = () => {
-    return allLinks.map((link,idx)=>{
+    return allLinks.map((link)=>{
       return (
-          <div key={idx} className="alert alert-primary">
+          <div key={link._id} className="alert alert-primary">
             <div className="row">
-              <div className="col-md-8">
+              <div className="col-md-8" onClick={event=>handleLinkClick(link)}>
                 <a href={link.url} target="_blank">
                   <h5 >{link.title}</h5>
                 </a>
@@ -41,6 +64,8 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
                 <span className="float-right mt-2 text-success font-weight-bold">
                   {moment(link.createdAt).fromNow()} by {link.postedBy.name}
                 </span>
+                <br/>
+                <span className="badge badge-secondary ml-2 float-right">{link.clicks} clicks</span>
               </div>
             </div>
             <div className="row">
@@ -75,6 +100,7 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
   }
 
   return(
+    
     <Layout>
       <div className="row">
         <div className="col-md-3">
@@ -104,6 +130,7 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
       <div className="text-center pt-4 pb-5">
         {loadMoreButton()}
       </div>
+    
     </Layout>
   )
 }
