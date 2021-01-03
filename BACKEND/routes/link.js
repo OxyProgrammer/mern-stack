@@ -7,7 +7,7 @@ const { runValidation } = require("../validators");
 
 // import from controllers
 const { requireSignin, authMiddleware } = require('../controllers/auth');
-const{create,list,update,read,remove}=require('../controllers/link');
+const{create,list,update,read,remove,clickCount}=require('../controllers/link');
 
 //routes  
 router.post('/link',linkCreateValidator, runValidation,requireSignin, authMiddleware, create);
