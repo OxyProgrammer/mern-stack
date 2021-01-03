@@ -63,9 +63,10 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
               <div className="col-md-4">
                 <span className="float-right mt-2 text-success font-weight-bold">
                   {moment(link.createdAt).fromNow()} by {link.postedBy.name}
+                  <br/>
+                  <span className="badge badge-secondary float-right">{link.clicks} clicks</span>
                 </span>
-                <br/>
-                <span className="badge badge-secondary ml-2 float-right">{link.clicks} clicks</span>
+                
               </div>
             </div>
             <div className="row">
