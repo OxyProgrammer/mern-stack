@@ -5,15 +5,7 @@ import * as config from '../../config';
 import Link from 'next/link';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
-
-//The following is a utility method and hence need not be created repeatedly for every re render.
-//Hence the method is kept outside the component body.
-const getDeepCopyOfLink=link=>{
-      const newLink = {...link};
-      newLink.categories = [...link.categories];
-      newLink.postedBy = {...link.postedBy};
-      return newLink;
-}
+import produce from 'immer';
 
 const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
 
@@ -40,10 +32,9 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
     try{
       const response = await axios.put(`${config.API}/click-count`,{linkId:link._id});
       const indexOfLink=allLinks.indexOf(link);
-      const allLinksCopy=[...allLinks];
-      const newLink = getDeepCopyOfLink(link);
-      newLink.clicks = response.data.clicks;
-      allLinksCopy.splice(indexOfLink, 1, newLink);
+      const allLinksCopy = produce(allLinks,draftAllLinks=>{
+        draftAllLinks[indexOfLink].clicks=response.data.clicks
+      });
       setAllLinks(allLinksCopy);
     }catch(error){
       console.log(error);
