@@ -5,6 +5,7 @@ const formidable=require('formidable');
 const AWS=require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
+const { S3 } = require('aws-sdk');
 
 const s3=new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -107,7 +108,83 @@ exports.read = (req, res) => {
 }
 
 exports.update = (req, res) => {
+  const {slug} = req.params;
+  const {name,image,content} = req.body;
+  Category.findOneAndUpdate({slug},{name,content},{new : true})
+  .exec((err,updated)=>{
+    if(err){
+      return res.status(400).json({error:'Could not find category to update'});
+    }
+    console.log('Updated category');
+    if(image){
+      //remove the existing image from S3 before uploading new updated one.
+      const deleteParams={
+        Bucket:'mern-stack-app-bucket',
+        Key:updated.image.key
+      };
+      s3.deleteObject(deleteParams,(error,success)=>{
+        if(error){
+          console.log('S3 DELETE ERROR DURING UPDATE',error);
+        }
+        console.log('S3 DELETED DURING UPDATE',success);
+
+        //handle upload image while updating
+        const base64Data=new Buffer.from (image.replace(/^data:image\/\w+;base64,/, ''),'base64');
+        const type = image.split(';')[0].split('/')[1];
+        const params={
+          Bucket:'mern-stack-app-bucket',
+          Key:`category/${uuidv4()}.${type}`,
+          Body: base64Data,
+          ACL: 'public-read',
+          ContentEncoding: 'base64',
+          ContentType:`image/${type}`
+        }
+        s3.upload(params,(error,data)=>{
+          if(error){
+            return res.status(400).json({
+              error:"Upload to s3 failed."
+            });
+          }
+          console.log('AWS UPLOAD RES DATA ',data);
+          updated.image.url=data.Location;
+          updated.image.key=data.Key;
+          updated.postedBy=req.user._id;
+          // save to db
+          updated.save((error,success)=>{
+            if(error){
+              console.log(error)
+              return res.status(400).json({
+                error:"Error saving category to database."
+              });
+            }
+            return res.json(updated);
+          });
+        });
+      });
+    }else{
+      return res.status(200).json(updated);
+    }
+  });
 }
 
 exports.remove = (req, res) => {
+  const {slug}=req.params;
+  Category.findOneAndRemove({slug}).exec((error,data)=>{
+    if(error){
+      return res.status(400).json({
+        error:'Could not delete category'
+      });
+    }
+    const deleteParams={
+      Bucket:'mern-stack-app-bucket',
+      Key:data.image.key
+    };
+    s3.deleteObject(deleteParams,(error,success)=>{
+      if(error){
+        console.log('S3 DELETE ERROR DURING UPDATE',error);
+      }
+      console.log('S3 DELETED DURING UPDATE',success);
+      res.status(200).json({message: 'Category deleted successfully'});
+    });
+  });
 }

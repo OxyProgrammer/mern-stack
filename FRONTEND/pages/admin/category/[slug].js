@@ -12,19 +12,20 @@ import Resizer from 'react-image-file-resizer';
 import 'react-quill/dist/quill.bubble.css';
 
 
-const create=({user,token})=>{
+const update=({oldCategory, token})=>{
 
   const [state,setState]=useState({
-    name:'',
+    name:oldCategory.name,
     error:'',
     success:'',
+    buttonText: 'Update',
     image:'',
-    buttonText:'Create'    
+    imagePreview:oldCategory.image.url    
   });  
-  const [content, setContent] = useState('');
-  const [imageUploadText,setImageUploadText]=useState('Upload Image');
+  const [content, setContent] = useState(oldCategory.content);
+  const [imageUploadText,setImageUploadText]=useState('Update Image');
 
-  const{name,error,image,success,buttonText}=state;
+  const{name,error,image,success,buttonText,imagePreview}=state;
 
   const handleContent = event =>{
     setContent(event);
@@ -58,9 +59,9 @@ const create=({user,token})=>{
 
   const handleSubmit=async event =>{
     event.preventDefault();
-    setState({ ...state, buttonText:'Creating...' });
+    setState({ ...state, buttonText:'Updating...' });
     try{
-      const response=await axios.post(`${config.API}/category`,{name,content,image},{
+      const response=await axios.put(`${config.API}/category/${oldCategory.slug}`,{name,content,image},{
         headers:{
           Authorization : `Bearer ${token}`
         }
@@ -69,21 +70,21 @@ const create=({user,token})=>{
       setState({...state,
                 name:'',
                 image:'',
-                buttonText:'Created',
-                success:'Category created.',
+                buttonText:'Updated',
+                success:'Category updated.',
                 error:''});
       setImageUploadText('Upload Image');
     }catch(error){
       setState({...state,name:'',
                 image:'',
-                buttonText:'Create', 
+                buttonText:'Update', 
                 success:'',
                 error:error.response.data.error});
       setImageUploadText('Upload Image');
     }
   }
 
-  const createCategoryForm=()=>{
+  const updateCategoryForm=()=>{
     return (<form onSubmit={handleSubmit}>
       <div className="form-group">
         <label className="text-muted">Name</label>
@@ -107,7 +108,10 @@ const create=({user,token})=>{
 
         <div className="form-group">
           <label className="btn btn-sm mt-2 btn-primary float-left">
-            {imageUploadText}
+            {imageUploadText} {'  '}
+            <span>
+              <img src={imagePreview} alt="image" height="20"/>
+            </span>
             <input onChange={handleImage} 
                   type="file" 
                   accept="image/*"
@@ -123,11 +127,11 @@ const create=({user,token})=>{
     <Layout>
       <div className="col-md-6 offset-md-3">
         <div className="card">
-          <h5 className="card-header">CREATE CATEGORY <FontAwesomeIcon className="float-sm-right" icon={faListAlt}/></h5>  
+          <h5 className="card-header">UPDATE CATEGORY <FontAwesomeIcon className="float-sm-right" icon={faListAlt}/></h5>  
           <div className="card-body">
             {success && showSuccessMessage(success)}
             {error && showErrorMessage(error)}
-            {createCategoryForm()}
+            {updateCategoryForm()}
           </div>
         </div>
       </div>
@@ -135,4 +139,8 @@ const create=({user,token})=>{
   )
 }
 
-export default withAdmin(create);
+update.getInitialProps = async ({req,query,token}) =>{
+  const response = await axios.post(`${config.API}/category/${query.slug}`);
+  return {oldCategory: response.data.category, token};
+}
+export default withAdmin(update);

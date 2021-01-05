@@ -58,7 +58,6 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
                   <br/>
                   <span className="badge badge-secondary float-right">{link.clicks} clicks</span>
                 </span>
-                
               </div>
             </div>
             <div className="row">
@@ -92,7 +91,6 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
     setSkip(toSkip);
   }
 
-
   return(
     <Layout>
       <div className="row">
@@ -104,8 +102,8 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
                 alt="Category image"/>
           </div>
         </div>
-        <div className="col-md-9">
-          <div className="font-weight-bold alert alert-success" role="alert">
+        <div className="col-md-9" style={{height: '200px'}}>
+          <div className="font-weight-bold alert alert-success" style={{height: '100%'}} role="alert">
             <h4 className="alert-heading">{category.name} - URL/Links</h4>
             <hr/>
             <p>{renderHTML(category.content || '')}</p>
@@ -116,17 +114,15 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
         <div className="col-md-3">
           {listOfPopularLinks()}
         </div>
-        <div className="col-md-9 ">
-          {listOfLinks()} 
+          <div className="col-md-9 ">
+            <InfiniteScroll
+              pageStart={0}
+              loadMore={loadMore}
+              hasMore={size > 0 && size >= limit}
+              loader={<img key={0} src="/static/images/loading.gif" alt="loading"></img>}>
+                {listOfLinks()} 
+            </InfiniteScroll>
         </div>
-      </div>
-        <div className="text-center pt-4 pb-5">
-          <InfiniteScroll
-            pageStart={0}
-            loadMore={loadMore}
-            hasMore={size > 0 && size >= limit}
-            loader={<img src="/static/images/loading.gif" alt="loading"></img>}>
-          </InfiniteScroll>
       </div>
     </Layout>
   )
