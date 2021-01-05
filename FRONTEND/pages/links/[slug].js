@@ -6,6 +6,7 @@ import Link from 'next/link';
 import renderHTML from 'react-render-html';
 import moment from 'moment';
 import produce from 'immer';
+import InfiniteScroll from 'react-infinite-scroller';
 
 const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
 
@@ -70,6 +71,16 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
     });
   }
 
+  // const loadMoreButton=()=>{
+  //   let button=null;
+  //   if(size > 0 && size >= limit){
+  //     button = (<button onClick={loadMore} className="btn btn-outline-primary btn-sm float-right">
+  //                 Load more...
+  //               </button>);
+  //   }
+  //   return button;
+  // }
+
   const loadMore=async ()=>{
     let toSkip = skip + limit;
     const response = await axios.post(`${config.API}/category/${query.slug}`,{
@@ -81,18 +92,8 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
     setSkip(toSkip);
   }
 
-  const loadMoreButton=()=>{
-    let button=null;
-    if(size > 0 && size >= limit){
-      button = (<button onClick={loadMore} className="btn btn-outline-primary btn-sm float-right">
-                  Load more...
-                </button>);
-    }
-    return button;
-  }
 
   return(
-    
     <Layout>
       <div className="row">
         <div className="col-md-3">
@@ -119,10 +120,14 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
           {listOfLinks()} 
         </div>
       </div>
-      <div className="text-center pt-4 pb-5">
-        {loadMoreButton()}
+        <div className="text-center pt-4 pb-5">
+          <InfiniteScroll
+            pageStart={0}
+            loadMore={loadMore}
+            hasMore={size > 0 && size >= limit}
+            loader={<img src="/static/images/loading.gif" alt="loading"></img>}>
+          </InfiniteScroll>
       </div>
-    
     </Layout>
   )
 }
