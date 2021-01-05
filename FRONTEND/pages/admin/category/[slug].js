@@ -66,13 +66,13 @@ const update=({oldCategory, token})=>{
           Authorization : `Bearer ${token}`
         }
       });
-      setContent('');
+      setContent(response.data.content);
       setState({...state,
-                name:'',
+                name:response.data.name,
                 image:'',
                 buttonText:'Updated',
                 success:'Category updated.',
-                imagePreview:'',
+                imagePreview:response.data.image.url,
                 error:''});
       setImageUploadText('Upload Image');
     }catch(error){
