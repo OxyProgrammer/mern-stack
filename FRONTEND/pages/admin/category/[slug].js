@@ -72,6 +72,7 @@ const update=({oldCategory, token})=>{
                 image:'',
                 buttonText:'Updated',
                 success:'Category updated.',
+                imagePreview:'',
                 error:''});
       setImageUploadText('Upload Image');
     }catch(error){
