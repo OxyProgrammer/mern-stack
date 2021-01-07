@@ -40,7 +40,6 @@ const read = ({user,token}) =>{
           Authorization: `Bearer ${token}`
         }
       });
-      console.log("CATEGORY DELETE SUCCESS");
       loadCategories();//ToDo: remove this and remove manually.
     }catch(error){
       console.log("CATEGORY DELETE ERROR",error);

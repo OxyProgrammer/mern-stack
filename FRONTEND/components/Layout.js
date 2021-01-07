@@ -11,7 +11,6 @@ import {isAuth,signOut} from '../helpers/auth';
 Router.onRouteChangeStart = url => NProgress.start();
 Router.onRouteChangeComplete = url => NProgress.done();
 Router.onRouteChangeError = url => NProgress.done();
-
 //#endregion
 
 
@@ -83,7 +82,7 @@ const layout = ({ children }) => {
            isAuth() && isAuth().role==='subscriber' && (
             <li className="nav-item">
               <Link href="/user">
-                <a className="nav-link">{isAuth().name.toUpper()}</a>
+                <a className="nav-link">{isAuth().name.toUpperCase()}</a>
               </Link>
             </li>
            )
