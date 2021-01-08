@@ -16,7 +16,7 @@ const update = ({ oldLink, token }) => {
     success: '',
     error: '',
     medium: oldLink.medium,
-    type: oldLink.type
+    type: oldLink.type,
   });
 
   const {
@@ -179,8 +179,12 @@ const update = ({ oldLink, token }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      let dynamicUpdateUrl = `${config.API}/link/${oldLink._id}`;
+      if (isAuth() && isAuth().role === 'admin') {
+        dynamicUpdateUrl = `${config.API}/link/admin/${oldLink._id}`;
+      }
       const response = await axios.put(
-        `${config.API}/link/${oldLink._id}`,
+        dynamicUpdateUrl,
         { title, url, categories, type, medium },
         {
           headers: {
@@ -188,7 +192,7 @@ const update = ({ oldLink, token }) => {
           },
         }
       );
-      setState({...state, success: 'Link is updated'});
+      setState({ ...state, success: 'Link is updated' });
     } catch (error) {
       setState({ ...state, error: error.response.data.error });
       console.log(error);
@@ -197,7 +201,6 @@ const update = ({ oldLink, token }) => {
 
   return (
     <Layout>
-      
       <div className="row">
         <div className="col-md-12">
           <h3>Submit Link/URL</h3>
