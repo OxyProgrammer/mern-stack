@@ -22,14 +22,23 @@ exports.create = (req, res) => {
 };
 
 exports.list = (req, res) => {
-  Link.find({}).exec((err, data) => {
-    if (err) {
-      return res.res.status(400).json({
-        error: 'Links could not load.',
-      });
-    }
-    res.json(data);
-  });
+  let limit = req.body.limitItems ? parseInt(req.body.limitItems) : 10;
+  let skip = req.body.skipItems ? parseInt(req.body.skipItems) : 0;
+
+  Link.find({})
+    .populate('postedBy', 'name')
+    .populate('categories', 'name, slug')
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .exec((err, data) => {
+      if (err) {
+        return res.res.status(400).json({
+          error: 'Links could not load.',
+        });
+      }
+      res.json(data);
+    });
 };
 
 exports.read = (req, res) => {
