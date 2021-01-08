@@ -1,4 +1,3 @@
-import react from 'react';
 import withUser from '../../withUser';
 import { useEffect, useState, Fragment } from 'react';
 import axios from 'axios';
