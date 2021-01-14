@@ -58,9 +58,9 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
   }
 
   const listOfLinks = () => {
-    return allLinks.map((link)=>{
+    return allLinks.map((link,idx)=>{
       return (
-          <div key={link._id} className="alert alert-primary">
+          <div key={idx} className="alert alert-primary">
             <div className="row">
               <div className="col-md-8" onClick={event=>handleLinkClick(link)}>
                 <a href={link.url} target="_blank">
