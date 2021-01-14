@@ -1,9 +1,8 @@
-const slugify = require('slugify');
 const AWS = require('aws-sdk');
 const Link = require('../models/link');
 const User = require('../models/user');
 const Category = require('../models/category');
-const {linkPublishedParams} = require('../helpers/email');
+const { linkPublishedParams } = require('../helpers/email');
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -131,4 +130,42 @@ exports.clickCount = (req, res) => {
     }
     return res.status(200).json(result);
   });
+};
+
+exports.popular = (req, res) => {
+  Link.find()
+    .populate('postedBy', 'name')
+    .sort({ clicks: -1 })
+    .limit(3)
+    .exec((error, links) => {
+      if(error){
+        res.status(400).json({
+          error:'Links not found'
+        })
+      }
+      res.json(links);
+    });
+};
+
+exports.popularInCategory = (req, res) => {
+  const {slug}=req.params
+  Category.findOne({slug}).exec((error,category)=>{
+    if(error){
+      res.status(400).json({
+        error:'Category not found'
+      })
+    }
+    Link.find({categories:category})
+    .populate('postedBy', 'name')
+    .sort({ clicks: -1 })
+    .limit(3)
+    .exec((error, links) => {
+      if(error){
+        res.status(400).json({
+          error:'Links not found'
+        })
+      }
+      res.json(links);
+    });
+  })
 };
