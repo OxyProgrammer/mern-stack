@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import axios from 'axios';
 import * as config from '../config';
-import Resizer from 'react-image-file-resizer';
 import Link from 'next/link';
+import moment from 'moment';
 
 //Utility method and hence doesnt need recreation.
 const getCategory=(category)=>{
@@ -28,17 +29,68 @@ const getCategoriesUi=(categories)=>{
 }
 
 const home = ({categories}) => {
-  return(
-    <Layout>
-      <div className="container">
-        <div className="row">
-          <h4 className="mx-2">Browse Tutorials / Courses</h4>
+
+  const [popular, setPopular] = useState([]);
+
+  const loadPopular = async () => {
+    const response = await axios.get(`${config.API}/link/popular`);
+    setPopular(response.data);
+  };
+
+  useEffect(() => {
+    loadPopular();
+  }, []);
+
+  const handleClick = async (linkId) => {
+    const response = await axios.put(`${config.API}/click-count`, { linkId });
+    loadPopular();
+  };
+
+  const getLiskOfTrendingLinks = () => {
+    return popular.map((link, idx) => (
+      <div key={idx} className="alert alert-warning p-2">
+        <div className="col col-md-8" onClick={(e) => handleClick(link._id)}>
+          <a href="{link.url}" target="_blank">
+            <h6 className="pt-2">{link.title}</h6>
+            <span className="pt-2 text-danger" style={{ fontSize: '12px' }}>
+              {link.url}
+            </span>
+          </a>
         </div>
-        <div className="row">
-          {getCategoriesUi(categories)}
+
+        <div className="col col-md-4">
+          <span className="pull-right" style={{ fontSize: '12px' }}>
+            {moment(link.createdAt).fromNow()} by {link.postedBy.name} Clicks:{' '}
+            {link.clicks}
+          </span>
         </div>
       </div>
-    </Layout>)};
+    ));
+  };
+
+  return(
+    <Layout>
+    <div className="container">
+      <div className="row">
+        <div className="col col-md-9">
+          <div className="container">
+            <div className="row">
+              <h4>Browse Tutorials / Courses</h4>
+            </div>
+            <div className="row">{getCategoriesUi(categories)}</div>
+          </div>
+        </div>
+        <div className="col col-md-3">
+          <div className="container">
+            <div className="row">
+              <h4>Trending</h4>
+            </div>
+            <div className="row">{getLiskOfTrendingLinks()}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Layout>)};
 
 home.getInitialProps=async()=>{
   const response = await axios.get(`${config.API}/categories`);
