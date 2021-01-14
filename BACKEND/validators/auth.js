@@ -12,6 +12,9 @@ exports.userRegisterValidator = [
   check("name").not().isEmpty().withMessage("Name is required"),
   emailValidator,
   passwordValidator,
+  check('categories')
+  .isLength({min:1})
+  .withMessage('Pick atleast one category.')
 ];
 
 exports.userLoginValidator = [emailValidator, passwordValidator];

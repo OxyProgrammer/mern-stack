@@ -1,6 +1,7 @@
 const Link = require('../models/link');
 const User = require('../models/user');
 
+
 exports.read = (req, res) => {
   User.findOne({ _id: req.user._id }).exec((error, user) => {
     if (error) {
