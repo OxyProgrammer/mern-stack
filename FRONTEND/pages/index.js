@@ -50,7 +50,7 @@ const home = ({categories}) => {
     return popular.map((link, idx) => (
       <div key={idx} className="alert alert-warning p-2">
         <div className="col col-md-8" onClick={(e) => handleClick(link._id)}>
-          <a href="{link.url}" target="_blank">
+          <a href={link.url} target="_blank">
             <h6 className="pt-2">{link.title}</h6>
             <span className="pt-2 text-danger" style={{ fontSize: '12px' }}>
               {link.url}

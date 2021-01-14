@@ -1,4 +1,4 @@
-import {useState, Fragment} from 'react';
+import {useState, useEffect} from 'react';
 import Layout from '../../components/Layout';
 import axios from 'axios';
 import * as config from '../../config';
@@ -14,20 +14,35 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
   const [limit, setLimit] = useState(linksLimit);
   const [skip, setSkip] = useState(linksSkip);
   const [size, setSize] = useState(totalLinks);
+  const [popular, setPopular] = useState([]);
 
-  const listOfPopularLinks=()=>{
-    return (<div className="row">
-     <div className="col-md-12 alert alert-primary">
-        Popular links
+  useEffect(() => {
+    loadPopular();
+  }, []);
+
+  const loadPopular = async () => {
+    const response = await axios.get(`${config.API}/link/popular/${category.slug}`);
+    setPopular(response.data);
+  };
+
+  const listOfPopularLinks = () => {
+    return popular.map((link, idx) => (
+      <div key={idx} className="alert alert-warning p-2">
+        <div className="col col-md-8" onClick={(e) => handleLinkClick(link._id)}>
+          <a href={link.url} target="_blank">
+            <h6 className="pt-2">{link.title}</h6>
+            <span className="pt-2 text-danger">{link.url}</span>
+          </a>
+        </div>
+
+        <div className="col col-md-4">
+          <p className="pull-right" style={{ fontSize: '12px' }}>
+            {moment(link.createdAt).fromNow()} by {link.postedBy.name} Clicks: {link.clicks}
+          </p>
+        </div>
       </div>
-      <div className="col-md-12 alert alert-primary">
-        Popular links
-      </div>
-      <div className="col-md-12 alert alert-primary">
-        Popular links
-      </div>
-    </div>)
-  }
+    ));
+  };
 
   const handleLinkClick = async link =>{
     try{
@@ -69,16 +84,6 @@ const links=({query, category, links, totalLinks, linksLimit, linksSkip})=>{
         );
     });
   }
-
-  // const loadMoreButton=()=>{
-  //   let button=null;
-  //   if(size > 0 && size >= limit){
-  //     button = (<button onClick={loadMore} className="btn btn-outline-primary btn-sm float-right">
-  //                 Load more...
-  //               </button>);
-  //   }
-  //   return button;
-  // }
 
   const loadMore=async ()=>{
     let toSkip = skip + limit;
