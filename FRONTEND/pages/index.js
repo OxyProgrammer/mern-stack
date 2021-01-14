@@ -9,9 +9,9 @@ import moment from 'moment';
 const getCategory=(category)=>{
   return (
     <div className="card text-white bg-dark" >
-      <h5 className="card-header">{category.name}</h5>  
+      <h6 className="card-header">{category.name}</h6>  
       <img className="fluid thumbnail"
-          style={{"height": "150px"}} 
+          style={{"height": "100px"}} 
           src={category.image.url} 
           alt="Category image"></img>
       <div className="card-footer">
