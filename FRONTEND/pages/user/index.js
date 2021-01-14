@@ -6,27 +6,26 @@ import Router from 'next/router';
 import axios from 'axios';
 import * as config from '../../config';
 
-const User = ({token, user, userLinks }) => {
-
-  const confirmDelete=  (e, linkId)=>{
+const User = ({ token, user, userLinks }) => {
+  const confirmDelete = (e, linkId) => {
     e.preventDefault();
-    let answer=window.confirm("Are you sure you want to delete the link?");
-    if(answer){
+    let answer = window.confirm('Are you sure you want to delete the link?');
+    if (answer) {
       handleDelete(linkId);
     }
-  }
-  const handleDelete= async (linkId)=>{
-    try{
-      const response = await axios.delete(`${config.API}/link/${linkId}`,{
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
+  };
+  const handleDelete = async (linkId) => {
+    try {
+      const response = await axios.delete(`${config.API}/link/${linkId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       Router.replace('/user');
-    }catch(error){
-      console.log("LINK DELETE ERROR",error);
+    } catch (error) {
+      console.log('LINK DELETE ERROR', error);
     }
-  }
+  };
 
   const listOfLinks = () =>
     userLinks.map((link, idx) => {
@@ -53,8 +52,13 @@ const User = ({token, user, userLinks }) => {
               </span>
             ))}
             <span className="badge text-secondary">{link.clicks} Clicks</span>
-            <span onClick={(e)=>confirmDelete(e,link._id)} className="badge text-danger pull-right">Delete</span>
-            <Link href={`/user/link/${link._id}`} >
+            <span
+              onClick={(e) => confirmDelete(e, link._id)}
+              className="badge text-danger pull-right"
+            >
+              Delete
+            </span>
+            <Link href={`/user/link/${link._id}`}>
               <span className="badge text-warning pull-right">Update</span>
             </Link>
           </div>
@@ -79,7 +83,7 @@ const User = ({token, user, userLinks }) => {
                 </li>
                 <li className="list-group-item nav-item">
                   <Link href="/user/profile/update">
-                    <a className="nav-link">All Categories</a>
+                    <a className="nav-link">Update profile</a>
                   </Link>
                 </li>
               </ul>
