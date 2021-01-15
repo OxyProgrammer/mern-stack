@@ -69,7 +69,7 @@ const layout = ({ children }) => {
           }
 
          {
-           isAuth() && isAuth().role==='admin' &&(
+           process.browser && isAuth() && isAuth().role==='admin' &&(
             <li className="nav-item">
               <Link href="/admin">
                 <a className="nav-link">{isAuth().name}</a>
@@ -79,7 +79,7 @@ const layout = ({ children }) => {
          }
 
         {
-           isAuth() && isAuth().role==='subscriber' && (
+           process.browser && isAuth() && isAuth().role==='subscriber' && (
             <li className="nav-item">
               <Link href="/user">
                 <a className="nav-link">{isAuth().name.toUpperCase()}</a>
