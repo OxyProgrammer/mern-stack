@@ -12,8 +12,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const login = () => {
 
   const [state,setState]=useState({
-    email: 'siddhartha.sarkar28@gmail.com',
-    password: 'Babai@12345',
+    email: '',
+    password: '',
     error: '',
     success: '',
     buttonText: 'Submit'
